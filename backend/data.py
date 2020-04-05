@@ -2,7 +2,7 @@ import pandas as pd
 import utils
 
 # file names
-data_prefix = '../data/'
+data_prefix = './data/'
 cases_csv = data_prefix + 'covid_19_data_nyt.csv'
 hospital_suffix = "_hospital_data.csv"
 hospital_atlas_csv = data_prefix + "hosp17_atlas.csv"
@@ -76,8 +76,10 @@ for s in states:
         state_county_epochs_ms[s_c] = county_df['epoch_ms']
         state_county_cases[s_c] = county_df['cases']
         state_county_deaths[s_c] = county_df['deaths']
-        state_county_cases_epochs_ms[s_c] = county_df['cases_epoch_ms'].tolist()
-        state_county_deaths_epochs_ms[s_c] = county_df['deaths_epoch_ms'].tolist()
+        state_county_cases_epochs_ms[s_c] = county_df['cases_epoch_ms'].tolist(
+        )
+        state_county_deaths_epochs_ms[s_c] = county_df['deaths_epoch_ms'].tolist(
+        )
 
 # init hospital maps
 state_county_bed_data = {}

@@ -1,11 +1,14 @@
 from flask import Flask, jsonify
+from flask_cors import CORS, cross_origin
 from controller import Controller
 
-app = Flask(__name__)
+application = Flask(__name__)
+cors = CORS(application)
 controller = Controller()
+application.config['CORS_HEADERS'] = 'Content-Type'
 
 
-@app.route('/<state>/<county>/cases')
+@application.route('/<state>/<county>/cases')
 def cases(state, county):
     if not county:
         return jsonify([])
@@ -14,7 +17,7 @@ def cases(state, county):
     return jsonify(controller.cases(state_upper, county_upper))
 
 
-@app.route('/<state>/<county>/bed_capacity')
+@application.route('/<state>/<county>/bed_capacity')
 def bed_capacity(state, county):
     if not county:
         return jsonify([])
@@ -23,7 +26,7 @@ def bed_capacity(state, county):
     return jsonify(controller.bed_capacity(state_upper, county_upper))
 
 
-@app.route('/<state>/<county>/deaths')
+@application.route('/<state>/<county>/deaths')
 def deaths(state, county):
     if not county:
         return jsonify([])
@@ -32,12 +35,16 @@ def deaths(state, county):
     return jsonify(controller.deaths(state_upper, county_upper))
 
 
-@app.route('/<state>/counties')
+@application.route('/<state>/counties')
 def counties(state):
     state_upper = state.upper()
     return jsonify(controller.counties(state_upper))
 
 
-@app.route('/states')
+@application.route('/states')
 def states():
     return jsonify(controller.get_states_formatted())
+
+
+if __name__ == "__main__":
+    application.run(host='0.0.0.0:8080')

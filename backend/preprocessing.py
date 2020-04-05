@@ -24,4 +24,4 @@ def preprocess_county_list(county_file):
                         [county_name_formatted, county_name, state_formatted, state])
 
 
-preprocess_county_list('../data/county_adjacency.txt')
+preprocess_county_list('./data/county_adjacency.txt')

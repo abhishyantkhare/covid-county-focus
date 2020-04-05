@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import DataChart from "../data_chart/data_chart"
+import DataChart from "./data_chart/data_chart"
 
 const CountyChart = (props) => {
 
