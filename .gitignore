@@ -117,3 +117,4 @@ dist
 
 .DS_STORE
 __pycache__/
+*.pem
