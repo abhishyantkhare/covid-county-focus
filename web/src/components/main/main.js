@@ -61,6 +61,12 @@ const Main = () => {
         fetchCounties()
     }
 
+    const filterState = (e) => {
+        console.log(e)
+        const filteredStates = states.filter((s) => s.includes(e))
+        setStates(filteredStates)
+    }
+
     return (
         <div>
             <Box align='center' gap="medium">
@@ -78,7 +84,7 @@ const Main = () => {
                     </Text>
                 </Box>
                 <Box direction="row" gap="medium">
-                    <Select options={states} onChange={changeState} value={state} />
+                    <Select options={states} onChange={changeState} value={state} onSearch={filterState} />
                     <Select options={counties} onChange={changeCounty} value={county} />
                 </Box>
             </Box>

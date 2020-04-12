@@ -2,6 +2,7 @@ from flask import Flask, jsonify
 from flask_cors import CORS, cross_origin
 from controller import Controller
 
+
 application = Flask(__name__)
 cors = CORS(application)
 controller = Controller()
@@ -44,6 +45,15 @@ def counties(state):
 @application.route('/states')
 def states():
     return jsonify(controller.get_states_formatted())
+
+
+@application.route('/<state>/<county>/case_projections')
+def case_projections(state, county):
+    if not county:
+        return jsonify([])
+    state_upper = state.upper()
+    county_upper = county.upper()
+    return jsonify(controller.case_projections(state_upper, county_upper))
 
 
 if __name__ == "__main__":

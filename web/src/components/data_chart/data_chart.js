@@ -5,6 +5,7 @@ import Chart from 'chart.js';
 const DataChart = (props) => {
     const cases = props.cases
     const deaths = props.deaths
+    const projectedCases = props.projectedCases
     const bedCapacityData = props.bedCapacityData
 
     useEffect(() => {
@@ -40,6 +41,16 @@ const DataChart = (props) => {
                         ],
                         borderWidth: 1,
                     },
+                    {
+                        label: 'Projected Cases',
+                        data: projectedCases,
+                        fill: false,
+                        borderColor: [
+                            'rgba(52, 152, 219, 1)'
+                        ],
+                        borderWidth: 1,
+                        borderDash: [10, 5]
+                    }
                 ]
             },
             options: {
@@ -71,7 +82,7 @@ const DataChart = (props) => {
         return function cleanup() {
             myLineChart.destroy()
         }
-    }, [cases, deaths, bedCapacityData])
+    }, [cases, deaths, bedCapacityData, projectedCases])
 
     return (
         <div class='chart-container'>
