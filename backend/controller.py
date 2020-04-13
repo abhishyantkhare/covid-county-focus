@@ -42,7 +42,6 @@ class Controller:
             preprocessing.dataset_to_preprocessing[dataset]()
 
     def set_data(self):
-        print("SETTING DATA")
         self.fetch_raw_datasets()
         self.preprocess_raw_datasets()
         self.data = data.Data()
@@ -62,7 +61,7 @@ class Controller:
         return self.data.state_to_counties_formatted[state].tolist()
 
     def get_states_formatted(self):
-        return self.data.states_formatted.tolist()
+        return self.data.states_formatted
 
     def deaths(self, state, county):
         s_c = (state, county)
@@ -70,4 +69,4 @@ class Controller:
 
     def case_projections(self, state, county):
         s_c = (state, county)
-        return self.projections.state_county_case_projections[s_c].tolist()
+        return self.projections.state_county_case_projections[s_c]

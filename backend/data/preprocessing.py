@@ -17,8 +17,9 @@ def preprocess_counties():
     raw_counties = datasets.get_raw_dataset(datasets.COUNTIES)
     counties = datasets.get_dataset(datasets.COUNTIES)
     with open(raw_counties, 'r', encoding="ISO-8859-1") as f:
-        with open(counties, 'w') as resultcsv:
-            county_writer = csv.writer(resultcsv, delimiter=',')
+        with open(counties, 'w',  encoding="utf-8") as resultcsv:
+            county_writer = csv.writer(
+                resultcsv, delimiter=',')
             county_writer.writerow(
                 ["County Formatted", "County", "State Formatted", "State", "Population"])
             county_reader = csv.reader(f)
