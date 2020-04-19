@@ -8,16 +8,17 @@ from apscheduler.schedulers.background import BackgroundScheduler
 
 class Controller:
 
-    def __init__(self):
+    def __init__(self, logger):
         self.raw_dataset_fetch_fns = dict()
         self.init_raw_dataset_fetch_fns()
         self.init_scheduler()
+        self.logger = logger
         self.set_data()
 
     def init_scheduler(self):
         self.scheduler = BackgroundScheduler()
         self.scheduler.start()
-        self.scheduler.add_job(self.set_data, 'interval', days=1)
+        self.scheduler.add_job(self.set_data, 'interval', minutes=30)
 
     def init_raw_dataset_fetch_fns(self):
         self.raw_dataset_fetch_fns[datasets.COUNTIES] = self.fetch_raw_counties
@@ -42,6 +43,7 @@ class Controller:
             preprocessing.dataset_to_preprocessing[dataset]()
 
     def set_data(self):
+        self.logger.critical("SETTING DATA")
         self.fetch_raw_datasets()
         self.preprocess_raw_datasets()
         self.data = data.Data()

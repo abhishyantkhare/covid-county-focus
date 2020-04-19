@@ -41,16 +41,17 @@ const DataChart = (props) => {
                         ],
                         borderWidth: 1,
                     },
+                    /* Not ready or accurate!  
                     {
-                        label: 'Projected Cases',
-                        data: projectedCases,
-                        fill: false,
-                        borderColor: [
-                            'rgba(52, 152, 219, 1)'
-                        ],
-                        borderWidth: 1,
-                        borderDash: [10, 5]
-                    }
+                          label: 'Projected Cases',
+                          data: projectedCases,
+                          fill: false,
+                          borderColor: [
+                              'rgba(52, 152, 219, 1)'
+                          ],
+                          borderWidth: 1,
+                          borderDash: [10, 5]
+                      } */
                 ]
             },
             options: {

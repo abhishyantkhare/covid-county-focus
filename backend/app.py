@@ -1,11 +1,14 @@
 from flask import Flask, jsonify
 from flask_cors import CORS, cross_origin
 from controller import Controller
+import logging
 
 
 application = Flask(__name__)
 cors = CORS(application)
-controller = Controller()
+gunicorn_logger = logging.getLogger('gunicorn.error')
+application.logger.handlers = gunicorn_logger.handlers
+controller = Controller(application.logger)
 application.config['CORS_HEADERS'] = 'Content-Type'
 
 
