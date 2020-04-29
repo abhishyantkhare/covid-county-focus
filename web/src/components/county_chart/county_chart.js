@@ -5,35 +5,48 @@ const CountyChart = (props) => {
 
     const data_url_prefix = `${process.env.REACT_APP_BACKEND}/${props.state}`
     // Feb 1
-    const startMs = 1580544000000
-    // March 18
-    const midMs = 1584514800000
-    // May 1
-    const endMs = 1588316400000
+    const DEFAULT_START_MS = 1580544000000
+    // Current time
+    const DEFAULT_END_MS = Date.now()
+    // Midway
+    const DEFAULT_MID_MS = Math.floor((DEFAULT_END_MS + DEFAULT_START_MS) / 2)
+
     const [cases, setCases] = useState([])
     const [deaths, setDeaths] = useState([])
+    const [startMs, setStartMs] = useState(DEFAULT_START_MS)
+    const [midMs, setMidMs] = useState(DEFAULT_MID_MS)
+    const [endMs, setEndMs] = useState(DEFAULT_END_MS)
     const [projectedCases, setProjectedCases] = useState([])
-    const [bedCapacityData, setBedCapacityData] = useState({})
-    const [bedCapacity, setBedCapacity] = useState()
+    const [bedCapacityData, setBedCapacityData] = useState([])
+    const [bedCapacity, setBedCapacity] = useState(0)
 
 
     useEffect(() => {
-        checkAndFetchData()
+        fetchCaseAndDeaths()
     }, [props.county, props.state])
-    const checkAndFetchData = () => {
+
+    // fetch deaths
+    useEffect(() => {
+        fetchBedCapacity()
+    }, [props.county, props.state, cases])
+
+    const fetchCaseAndDeaths = () => {
         if (props.county.length === 0) {
             setCases([])
             setDeaths([])
-            setBedCapacityData([])
-            setBedCapacity()
-            setProjectedCases([])
             return
         }
         fetchCountyCases()
         fetchCountyDeaths()
-        fetchCountyBedCapacity()
-        fetchCountyCaseProjections()
+    }
 
+    const fetchBedCapacity = () => {
+        if (props.county.length === 0) {
+            setBedCapacityData([])
+            setBedCapacity(0)
+            return
+        }
+        fetchCountyBedCapacity()
     }
     const fetchCountyCases = () => {
         const data_url = `${data_url_prefix}/${props.county}/cases`
@@ -48,11 +61,15 @@ const CountyChart = (props) => {
                         y: d.cases,
                     }
                 })
-                displayCases.push({
-                    x: endMs,
-                })
+                setStartMs(displayCases[0].x)
+                setMidMs(displayCases[Math.floor(rawCases.length / 2)].x)
+                setEndMs(displayCases[displayCases.length - 1].x)
+                /*   displayCases.push({
+                       x: endMs,
+                   })*/
 
                 setCases(displayCases)
+                fetchCountyBedCapacity()
             })
     }
 
@@ -69,9 +86,9 @@ const CountyChart = (props) => {
                         y: d.deaths,
                     }
                 })
-                displayDeaths.push({
-                    x: endMs,
-                })
+                /*   displayDeaths.push({
+                       x: endMs,
+                   })*/
 
                 setDeaths(displayDeaths)
             })
@@ -118,9 +135,9 @@ const CountyChart = (props) => {
                         y: d.projected_cases,
                     }
                 })
-                displayProjectedCases.push({
-                    x: endMs,
-                })
+                /*  displayProjectedCases.push({
+                      x: endMs,
+                  })*/
 
                 setProjectedCases(displayProjectedCases)
                 console.log(displayProjectedCases)
@@ -135,8 +152,7 @@ const CountyChart = (props) => {
             showBedCapacity={true}
             bedCapacityData={bedCapacityData}
             bedCapacity={bedCapacity}
-            startMs={startMs}
-            endMs={endMs} />
+        />
     )
 }
 
