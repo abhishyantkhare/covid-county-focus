@@ -68,6 +68,11 @@ class Controller:
             'total_bed_capacity': int(self.data.state_county_bed_data[s_c_t])
         }
 
+    def state_bed_capacity(self, state):
+        return {
+            'total_bed_capacity': int(self.data.state_bed_data[state])
+        }
+
     def counties(self, state):
         return self.data.state_to_counties_formatted[state].tolist()
 
@@ -77,6 +82,9 @@ class Controller:
     def state_county_deaths(self, state, county):
         s_c = (state, county)
         return self.data.state_county_deaths_epochs_ms[s_c].tolist()
+
+    def state_deaths(self, state):
+        return self.data.state_deaths_epochs_ms[state].tolist()
 
     def case_projections(self, state, county):
         s_c = (state, county)

@@ -125,11 +125,15 @@ class Data:
 
     def process_hospital_atlas_dataset(self):
         self.state_county_bed_data = {}
+        self.state_bed_data = {}
         for s in self.states:
             counties = self.state_to_counties[s]
             state_hospitals_df = self.hospital_atlas_df.loc[self.hospital_atlas_df['STATE'] == s]
+            if s not in self.state_bed_data:
+                self.state_bed_data[s] = 0
             for c in counties:
                 county_beds_total = state_hospitals_df.loc[state_hospitals_df['COUNTY'] == c]['TOTAL_BEDS'].sum(
                 )
                 s_c_t = (s, c, 'total')
                 self.state_county_bed_data[s_c_t] = county_beds_total
+                self.state_bed_data[s] += county_beds_total

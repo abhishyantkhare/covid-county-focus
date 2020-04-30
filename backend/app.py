@@ -36,6 +36,12 @@ def state_county_bed_capacity(state, county):
     return jsonify(controller.state_county_bed_capacity(state_upper, county_upper))
 
 
+@application.route('/<state>/all/bed_capacity')
+def state_bed_capacity(state):
+    state_upper = state.upper()
+    return jsonify(controller.state_bed_capacity(state_upper))
+
+
 @application.route('/<state>/<county>/deaths')
 def state_county_deaths(state, county):
     if not county:
@@ -43,6 +49,12 @@ def state_county_deaths(state, county):
     state_upper = state.upper()
     county_upper = county.upper()
     return jsonify(controller.state_county_deaths(state_upper, county_upper))
+
+
+@application.route('/<state>/all/deaths')
+def state_deaths(state):
+    state_upper = state.upper()
+    return jsonify(controller.state_deaths(state_upper))
 
 
 @application.route('/<state>/counties')
