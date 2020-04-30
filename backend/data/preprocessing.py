@@ -47,26 +47,48 @@ def preprocess_counties():
                 county_writer.writerow(custom_county)
 
 
-def preprocess_covid_19_nyt():
-    if not datasets.raw_dataset_exists(datasets.COVID_19_NYT):
+def preprocess_covid_19_nyt_county():
+    if not datasets.raw_dataset_exists(datasets.COVID_19_NYT_COUNTY):
         return
-    raw_covid_19_nyt = datasets.get_raw_dataset(datasets.COVID_19_NYT)
-    covid_19_nyt = datasets.get_dataset(datasets.COVID_19_NYT)
-    raw_covid_19_nyt_df = pd.read_csv(raw_covid_19_nyt)
-    raw_covid_19_nyt_df['county'] = raw_covid_19_nyt_df['county'].map(
-        utils.nyc_to_ny)
-    raw_covid_19_nyt_df['county'] = raw_covid_19_nyt_df['county'].str.upper()
-    raw_covid_19_nyt_df['county'] = raw_covid_19_nyt_df['county'].str.replace(
-        " ", "")
-    raw_covid_19_nyt_df['county'] = raw_covid_19_nyt_df['county'].map(
-        unidecode.unidecode)
-    raw_covid_19_nyt_df['state'] = raw_covid_19_nyt_df['state'].str.upper()
-    raw_covid_19_nyt_df['state'] = raw_covid_19_nyt_df['state'].str.replace(
-        " ", "")
-    raw_covid_19_nyt_df = raw_covid_19_nyt_df.assign(
-        epoch_ms=raw_covid_19_nyt_df['date'].map(utils.date_string_to_epoch_ms))
 
-    raw_covid_19_nyt_df.to_csv(covid_19_nyt)
+    raw_covid_19_nyt_county = datasets.get_raw_dataset(
+        datasets.COVID_19_NYT_COUNTY)
+    raw_covid_19_nyt_county_df = pd.read_csv(raw_covid_19_nyt_county)
+    raw_covid_19_nyt_county_df['county'] = raw_covid_19_nyt_county_df['county'].map(
+        utils.nyc_to_ny)
+    raw_covid_19_nyt_county_df['county'] = raw_covid_19_nyt_county_df['county'].str.upper(
+    )
+    raw_covid_19_nyt_county_df['county'] = raw_covid_19_nyt_county_df['county'].str.replace(
+        " ", "")
+    raw_covid_19_nyt_county_df['county'] = raw_covid_19_nyt_county_df['county'].map(
+        unidecode.unidecode)
+    raw_covid_19_nyt_county_df['state'] = raw_covid_19_nyt_county_df['state'].str.upper(
+    )
+    raw_covid_19_nyt_county_df['state'] = raw_covid_19_nyt_county_df['state'].str.replace(
+        " ", "")
+    raw_covid_19_nyt_county_df = raw_covid_19_nyt_county_df.assign(
+        epoch_ms=raw_covid_19_nyt_county_df['date'].map(utils.date_string_to_epoch_ms))
+
+    covid_19_nyt_county = datasets.get_dataset(datasets.COVID_19_NYT_COUNTY)
+    raw_covid_19_nyt_county_df.to_csv(covid_19_nyt_county)
+
+
+def preprocess_covid_19_nyt_state():
+    if not datasets.raw_dataset_exists(datasets.COVID_19_NYT_STATE):
+        return
+    raw_covid_19_nyt_state = datasets.get_raw_dataset(
+        datasets.COVID_19_NYT_STATE)
+
+    raw_covid_19_nyt_state_df = pd.read_csv(raw_covid_19_nyt_state)
+    raw_covid_19_nyt_state_df['state'] = raw_covid_19_nyt_state_df['state'].str.upper(
+    )
+    raw_covid_19_nyt_state_df['state'] = raw_covid_19_nyt_state_df['state'].str.replace(
+        " ", "")
+    raw_covid_19_nyt_state_df = raw_covid_19_nyt_state_df.assign(
+        epoch_ms=raw_covid_19_nyt_state_df['date'].map(utils.date_string_to_epoch_ms))
+
+    covid_19_nyt_state = datasets.get_dataset(datasets.COVID_19_NYT_STATE)
+    raw_covid_19_nyt_state_df.to_csv(covid_19_nyt_state)
 
 
 def preprocess_hospital_atlas():
@@ -86,6 +108,7 @@ def preprocess_hospital_atlas():
 
 dataset_to_preprocessing = {
     datasets.COUNTIES: preprocess_counties,
-    datasets.COVID_19_NYT: preprocess_covid_19_nyt,
+    datasets.COVID_19_NYT_COUNTY: preprocess_covid_19_nyt_county,
+    datasets.COVID_19_NYT_STATE: preprocess_covid_19_nyt_state,
     datasets.HOSPIAL_ATLAS: preprocess_hospital_atlas,
 }

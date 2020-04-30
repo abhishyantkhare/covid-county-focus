@@ -13,30 +13,36 @@ application.config['CORS_HEADERS'] = 'Content-Type'
 
 
 @application.route('/<state>/<county>/cases')
-def cases(state, county):
+def state_county_cases(state, county):
     if not county:
         return jsonify([])
     state_upper = state.upper()
     county_upper = county.upper()
-    return jsonify(controller.cases(state_upper, county_upper))
+    return jsonify(controller.state_county_cases(state_upper, county_upper))
+
+
+@application.route('/<state>/all/cases')
+def state_cases(state):
+    state_upper = state.upper()
+    return jsonify(controller.state_cases(state_upper))
 
 
 @application.route('/<state>/<county>/bed_capacity')
-def bed_capacity(state, county):
+def state_county_bed_capacity(state, county):
     if not county:
         return jsonify([])
     state_upper = state.upper()
     county_upper = county.upper()
-    return jsonify(controller.bed_capacity(state_upper, county_upper))
+    return jsonify(controller.state_county_bed_capacity(state_upper, county_upper))
 
 
 @application.route('/<state>/<county>/deaths')
-def deaths(state, county):
+def state_county_deaths(state, county):
     if not county:
         return jsonify([])
     state_upper = state.upper()
     county_upper = county.upper()
-    return jsonify(controller.deaths(state_upper, county_upper))
+    return jsonify(controller.state_county_deaths(state_upper, county_upper))
 
 
 @application.route('/<state>/counties')

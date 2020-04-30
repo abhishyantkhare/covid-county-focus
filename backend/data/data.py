@@ -17,12 +17,24 @@ class Data:
         counties_dataset = datasets.get_dataset(datasets.COUNTIES)
         self.counties_df = pd.read_csv(counties_dataset)
 
-    def init_covid_19_nyt_dataset(self):
-        covid_19_nyt_dataset = datasets.get_dataset(datasets.COVID_19_NYT)
-        self.covid_19_nyt_df = pd.read_csv(covid_19_nyt_dataset)
-        self.covid_19_nyt_df = self.covid_19_nyt_df.assign(cases_epoch_ms=self.covid_19_nyt_df.apply(
+    def init_covid_19_nyt_county_dataset(self):
+        covid_19_nyt_county_dataset = datasets.get_dataset(
+            datasets.COVID_19_NYT_COUNTY)
+        self.covid_19_nyt_county_df = pd.read_csv(covid_19_nyt_county_dataset)
+        self.covid_19_nyt_county_df = self.covid_19_nyt_county_df.assign(cases_epoch_ms=self.covid_19_nyt_county_df.apply(
             lambda x: utils.data_epoch_ms_dict(x['cases'], 'cases', x['epoch_ms']), axis=1))
-        self.covid_19_nyt_df = self.covid_19_nyt_df.assign(deaths_epoch_ms=self.covid_19_nyt_df.apply(
+        self.covid_19_nyt_county_df = self.covid_19_nyt_county_df.assign(deaths_epoch_ms=self.covid_19_nyt_county_df.apply(
+            lambda x: utils.data_epoch_ms_dict(
+                x['deaths'], 'deaths', x['epoch_ms']), axis=1
+        ))
+
+    def init_covid_19_nyt_state_dataset(self):
+        covid_19_nyt_state_dataset = datasets.get_dataset(
+            datasets.COVID_19_NYT_STATE)
+        self.covid_19_nyt_state_df = pd.read_csv(covid_19_nyt_state_dataset)
+        self.covid_19_nyt_state_df = self.covid_19_nyt_state_df.assign(cases_epoch_ms=self.covid_19_nyt_state_df.apply(
+            lambda x: utils.data_epoch_ms_dict(x['cases'], 'cases', x['epoch_ms']), axis=1))
+        self.covid_19_nyt_state_df = self.covid_19_nyt_state_df.assign(deaths_epoch_ms=self.covid_19_nyt_state_df.apply(
             lambda x: utils.data_epoch_ms_dict(
                 x['deaths'], 'deaths', x['epoch_ms']), axis=1
         ))
@@ -36,9 +48,13 @@ class Data:
             self.init_counties_dataset,
             self.process_counties_dataset
         ]
-        self.dataset_fns[datasets.COVID_19_NYT] = [
-            self.init_covid_19_nyt_dataset,
-            self.process_covid_19_nyt_dataset
+        self.dataset_fns[datasets.COVID_19_NYT_COUNTY] = [
+            self.init_covid_19_nyt_county_dataset,
+            self.process_covid_19_nyt_county_dataset
+        ]
+        self.dataset_fns[datasets.COVID_19_NYT_STATE] = [
+            self.init_covid_19_nyt_state_dataset,
+            self.process_covid_19_nyt_state_dataset
         ]
         self.dataset_fns[datasets.HOSPIAL_ATLAS] = [
             self.init_hospital_atlas_dataset,
@@ -61,7 +77,7 @@ class Data:
                 self.state_county_pop[s_c] = state_counties.loc[state_counties['County']
                                                                 == c]['Population'].values[0]
 
-    def process_covid_19_nyt_dataset(self):
+    def process_covid_19_nyt_county_dataset(self):
         self.state_county_dates = {}
         self.state_county_cases = {}
         self.state_county_deaths = {}
@@ -69,10 +85,9 @@ class Data:
         self.state_county_cases_epochs_ms = {}
         self.state_county_deaths_epochs_ms = {}
         self.state_county_last_epoch_ms = {}
-
         for s in self.states:
             counties = self.state_to_counties[s]
-            state_df = self.covid_19_nyt_df.loc[self.covid_19_nyt_df['state'] == s]
+            state_df = self.covid_19_nyt_county_df.loc[self.covid_19_nyt_county_df['state'] == s]
             for c in counties:
                 county_df = state_df.loc[state_df['county'] == c]
                 s_c = (s, c)
@@ -80,10 +95,33 @@ class Data:
                 self.state_county_epochs_ms[s_c] = county_df['epoch_ms']
                 self.state_county_last_epoch_ms[s_c] = utils.calc_last_epoch_ms(
                     county_df['epoch_ms'])
-                self.state_county_cases[s_c] = county_df['cases']
-                self.state_county_deaths[s_c] = county_df['deaths']
+                cases = county_df['cases']
+                deaths = county_df['deaths']
+                self.state_county_cases[s_c] = cases
+                self.state_county_deaths[s_c] = deaths
                 self.state_county_cases_epochs_ms[s_c] = county_df['cases_epoch_ms']
                 self.state_county_deaths_epochs_ms[s_c] = county_df['deaths_epoch_ms']
+
+    def process_covid_19_nyt_state_dataset(self):
+        self.state_dates = {}
+        self.state_cases = {}
+        self.state_deaths = {}
+        self.state_epochs_ms = {}
+        self.state_cases_epochs_ms = {}
+        self.state_deaths_epochs_ms = {}
+        self.state_last_epoch_ms = {}
+        for s in self.states:
+            state_df = self.covid_19_nyt_state_df.loc[self.covid_19_nyt_state_df['state'] == s]
+            self.state_dates[s] = state_df['date']
+            self.state_epochs_ms[s] = state_df['epoch_ms']
+            self.state_last_epoch_ms[s] = utils.calc_last_epoch_ms(
+                state_df['epoch_ms'])
+            cases = state_df['cases']
+            deaths = state_df['deaths']
+            self.state_cases[s] = cases
+            self.state_deaths[s] = deaths
+            self.state_cases_epochs_ms[s] = state_df['cases_epoch_ms']
+            self.state_deaths_epochs_ms[s] = state_df['deaths_epoch_ms']
 
     def process_hospital_atlas_dataset(self):
         self.state_county_bed_data = {}

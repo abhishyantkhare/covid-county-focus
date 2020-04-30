@@ -1,13 +1,15 @@
 import os
 
 COUNTIES = 'counties'
-COVID_19_NYT = 'covid_19_nyt'
+COVID_19_NYT_COUNTY = 'covid_19_nyt_county'
+COVID_19_NYT_STATE = 'covid_19_nyt_state'
 HOSPIAL_ATLAS = 'hospital_atlas_2017'
 
 # Order matters! List these datasets in the order you'd like them to be processed
 DATASETS = [
     COUNTIES,
-    COVID_19_NYT,
+    COVID_19_NYT_COUNTY,
+    COVID_19_NYT_STATE,
     HOSPIAL_ATLAS
 ]
 
@@ -16,14 +18,16 @@ FILE_EXT = '.csv'
 
 RAW_DATASETS = [
     COUNTIES,
-    COVID_19_NYT
+    COVID_19_NYT_COUNTY,
+    COVID_19_NYT_STATE
 ]
 RAW_DATA_PREFIX = 'data/raw_datasets/'
 RAW_FILE_EXT = '.csv'
 
 RAW_DATASETS_TO_SOURCES = {
-    COVID_19_NYT: 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv',
-    COUNTIES: 'https://www2.census.gov/programs-surveys/popest/datasets/2010-2019/counties/totals/co-est2019-alldata.csv'
+    COVID_19_NYT_COUNTY: 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv',
+    COUNTIES: 'https://www2.census.gov/programs-surveys/popest/datasets/2010-2019/counties/totals/co-est2019-alldata.csv',
+    COVID_19_NYT_STATE: 'https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv'
 }
 
 

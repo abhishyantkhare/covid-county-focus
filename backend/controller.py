@@ -22,11 +22,17 @@ class Controller:
 
     def init_raw_dataset_fetch_fns(self):
         self.raw_dataset_fetch_fns[datasets.COUNTIES] = self.fetch_raw_counties
-        self.raw_dataset_fetch_fns[datasets.COVID_19_NYT] = self.fetch_raw_covid_19_nyt
+        self.raw_dataset_fetch_fns[datasets.COVID_19_NYT_COUNTY] = self.fetch_raw_covid_19_nyt_county
+        self.raw_dataset_fetch_fns[datasets.COVID_19_NYT_STATE] = self.fetch_raw_covid_19_nyt_state
 
-    def fetch_raw_covid_19_nyt(self):
-        source = datasets.RAW_DATASETS_TO_SOURCES[datasets.COVID_19_NYT]
-        dest = datasets.get_raw_dataset(datasets.COVID_19_NYT)
+    def fetch_raw_covid_19_nyt_county(self):
+        source = datasets.RAW_DATASETS_TO_SOURCES[datasets.COVID_19_NYT_COUNTY]
+        dest = datasets.get_raw_dataset(datasets.COVID_19_NYT_COUNTY)
+        urlretrieve(source, dest)
+
+    def fetch_raw_covid_19_nyt_state(self):
+        source = datasets.RAW_DATASETS_TO_SOURCES[datasets.COVID_19_NYT_STATE]
+        dest = datasets.get_raw_dataset(datasets.COVID_19_NYT_STATE)
         urlretrieve(source, dest)
 
     def fetch_raw_counties(self):
@@ -49,11 +55,14 @@ class Controller:
         self.data = data.Data()
         self.projections = Projections(self.data)
 
-    def cases(self, state, county):
+    def state_county_cases(self, state, county):
         s_c = (state, county)
         return self.data.state_county_cases_epochs_ms[s_c].tolist()
 
-    def bed_capacity(self, state, county):
+    def state_cases(self, state):
+        return self.data.state_cases_epochs_ms[state].tolist()
+
+    def state_county_bed_capacity(self, state, county):
         s_c_t = (state, county, 'total')
         return {
             'total_bed_capacity': int(self.data.state_county_bed_data[s_c_t])
@@ -65,7 +74,7 @@ class Controller:
     def get_states_formatted(self):
         return self.data.states_formatted
 
-    def deaths(self, state, county):
+    def state_county_deaths(self, state, county):
         s_c = (state, county)
         return self.data.state_county_deaths_epochs_ms[s_c].tolist()
 
