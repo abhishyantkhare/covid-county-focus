@@ -74,7 +74,7 @@ class Controller:
         }
 
     def counties(self, state):
-        return self.data.state_to_counties_formatted[state].tolist()
+        return ['All'] + self.data.state_to_counties_formatted[state].tolist()
 
     def get_states_formatted(self):
         return self.data.states_formatted

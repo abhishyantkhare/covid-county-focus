@@ -52,14 +52,14 @@ const Main = () => {
 
     const changeCounty = (e) => {
         setCounty(e.option)
-        setCountyUrl(e.option.replace(/\s+/g, ''))
+        setCountyUrl(e.option.toLowerCase().replace(/\s+/g, ''))
     }
 
     const changeState = (e) => {
         setState(e.option)
         setCountyUrl('')
         setCounty('')
-        setStateUrl(e.option.replace(/\s+/g, ''))
+        setStateUrl(e.option.toLowerCase().replace(/\s+/g, ''))
         fetchCounties()
     }
 
