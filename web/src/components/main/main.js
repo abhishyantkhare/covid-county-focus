@@ -77,7 +77,7 @@ const Main = () => {
                         {HEADER_TEXT}
                     </Heading>
                 </Box>
-                <Box direction="row" gap="medium">
+                <Box direction="row" gap="medium" margin={{ "left": "small", "right": "small" }}>
                     <Select options={states} onChange={changeState} value={state} />
                     <Select options={counties} onChange={changeCounty} value={county} />
                 </Box>
