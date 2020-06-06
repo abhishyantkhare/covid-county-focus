@@ -6,3 +6,6 @@ apscheduler
 unidecode
 numpy
 scipy
+opentelemetry-api
+opentelemetry-sdk
+opentelemetry-ext-otcollector

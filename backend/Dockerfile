@@ -19,8 +19,10 @@ WORKDIR /backend
 # Install dependencies
 RUN pip3 install -r requirements.txt
 
+EXPOSE 6001
 
-CMD gunicorn --bind 0.0.0.0:8080  --access-logfile /logs/access_log --error-logfile /logs/error_log --timeout 60 app
+
+CMD gunicorn --bind 0.0.0.0:8080 --timeout 120 app
 
 
 

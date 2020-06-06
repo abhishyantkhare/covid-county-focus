@@ -53,7 +53,7 @@ class Controller:
         self.fetch_raw_datasets()
         self.preprocess_raw_datasets()
         self.data = data.Data()
-        self.projections = Projections(self.data)
+        #self.projections = Projections(self.data)
 
     def state_county_cases(self, state, county):
         s_c = (state, county)
